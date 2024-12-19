@@ -4,6 +4,11 @@ Aaro Varjus
 
 COMP:SGN.120 Project
 Audio classification project
+
+This project is an audio classification tool developed as part of the COMP:SGN.120 course project. 
+The tool is capable of converting various audio file formats to .wav, normalizing audio data, segmenting audio,
+extracting features, and classifying audio using a Support Vector Machine (SVM). In this case we studied the 
+audiospectral difference of cars and trams.
 """
 
 
