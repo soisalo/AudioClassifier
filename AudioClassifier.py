@@ -1,5 +1,5 @@
 """
-Eemil Soisalo 150353416
+Eemil Soisalo
 Aaro Varjus 
 
 COMP:SGN.120 Project
