@@ -354,54 +354,6 @@ def plot_combined_mfcc_class(mfcc_car, mfcc_tram, sr, n_mfcc=13):
     plt.tight_layout()
     plt.show()
 
-def compute_mel_spectrogram(audio_path, sr, n_mels=128):
-
-    """
-    Compute the mel-spectrogram for a given audio file.
-
-    Args:
-    - audio_path: Path to the audio file.
-    - sr: Sampling rate.
-    - n_mels: Number of mel bands.
-
-    Returns:
-    - Mel-spectrogram matrix.
-    """
-    audio, _ = librosa.load(audio_path, sr=sr)
-    mel = librosa.feature.melspectrogram(y=audio, sr=sr, n_mels=n_mels)
-    return librosa.power_to_db(mel)
-
-def compute_mean_mel(spectrograms):
- 
-    return np.mean(spectrograms, axis=1)
-
-def plot_mel_difference(mel_car, mel_tram):
-
-    """
-    Plot the scatter plot of differences between car and tram mel-spectrograms.
-
-    Args:
-    - mel_car: Mean mel-spectrogram for car class.
-    - mel_tram: Mean mel-spectrogram for tram class.
-    """
-    diff = mel_car - mel_tram
-
-    plt.figure(figsize=(10, 8))
-    plt.scatter(
-        np.repeat(range(diff.shape[0]), diff.shape[1]),  # Mel frequency bands
-        np.tile(range(diff.shape[1]), diff.shape[0]),   # Time frames
-        c=diff.flatten(),
-        cmap="coolwarm",
-        alpha=0.7
-    )
-    plt.colorbar(label="Difference (dB)")
-    plt.title("Scatter Plot of Mel-Spectrogram Differences (Car - Tram)")
-    plt.xlabel("Mel Frequency Band Index")
-    plt.ylabel("Time Frame Index")
-    plt.grid(True)
-    plt.tight_layout()
-    plt.show()
-
 def main():
     """
     Main function
@@ -431,27 +383,6 @@ def main():
     mfcc_car = combine_mfccs(segment_car, sr)
     mfcc_tram = combine_mfccs(segment_tram, sr)
 
-    mel_car_list = [
-    compute_mel_spectrogram(os.path.join(dir_audio_output_car, file), sr)
-    for file in os.listdir(dir_audio_output_car) if file.endswith('.wav')
-    ]
-
-    mel_tram_list = [
-    compute_mel_spectrogram(os.path.join(dir_audio_output_tram, file), sr)
-    for file in os.listdir(dir_audio_output_tram) if file.endswith('.wav')
-    ]
-    
-   # Compute mean mel-spectrograms
-    mel_car = compute_mean_mel(mel_car_list)
-    mel_tram = compute_mean_mel(mel_tram_list)
-
-    # Compute mel-spectrograms
-    mel_car = compute_mel_spectrogram(mel_car)
-    mel_tram = compute_mel_spectrogram(mel_tram)
-
-    
-
-
     # Plot the combined MFCCs
     plot_combined_mfcc(mfcc_car, mfcc_tram, sr)
     plot_combined_mfcc_class(mfcc_car, mfcc_tram, sr, n_mfcc=13)
@@ -465,7 +396,6 @@ def main():
     features_car_validation = np.array([feature_extraction(segment, sr) for segment in segment_car_validation])
     features_tram_validation = np.array([feature_extraction(segment, sr) for segment in segment_tram_validation])
 
-    
     # Combine the features and classes
     features = np.vstack([features_car, features_tram])
     features_validation = np.vstack([features_car_validation, features_tram_validation])
